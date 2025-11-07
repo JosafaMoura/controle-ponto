@@ -1,0 +1,144 @@
+* {
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #040404, #0571F4);
+    }
+
+    .login-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 80px;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #2a5298;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #040404;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #181893;
+    }
+
+    .links {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .links a {
+      color: #0571F4;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .links a:hover {
+      color: #1e3c72;
+    }
+
+    /* ======== CAMPOS DO FORMULÁRIO ======== */
+.campo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;/* 🔹 Deixa o título à esquerda */
+  margin-bottom: 15px;
+  text-align: left; /* Garante que todo o texto fique alinhado à esquerda */
+}
+
+.campo label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.campo input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid white;
+  background: #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.campo input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* ======== CHECKBOX DE POLÍTICA ======== */
+.politica {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  color: #333;
+  margin: 10px 0 10px 0;
+  text-align: left;
+}
+
+.politica input[type="checkbox"] {
+  margin-top: 3px;
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+  cursor: pointer;
+  accent-color: #040404; /* 🔹 cor azul moderna do checkbox */
+}
+
+.politica a {
+  color: #040404;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.politica a:hover {
+  text-decoration: underline;
+}
+.erro-login {
+  color: red;
+  text-align: center;
+}

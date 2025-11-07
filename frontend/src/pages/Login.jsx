@@ -3,9 +3,11 @@ import logo from "../imagens/logo/Logotipo.png";
 function Login() {
   return (
     <div className="login-container">
-      
-      <img src={logo} alt="Logo" className="logo" />
-      <h2>Insira seu E-mail e Senha</h2>
+      <div className="header">
+        <img src={logo} alt="Logo" className="logo" />
+        <h2>Grupo Locar</h2>
+      </div> 
+      <h3>Insira seu E-mail e Senha</h3>
 
       <form>
         <div className="campo">

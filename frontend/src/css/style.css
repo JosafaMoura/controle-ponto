@@ -21,10 +21,26 @@
       max-width: 380px;
       text-align: center;
     }
+    .login-container h3 {
+      color: black;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: row;      /* lado a lado */
+      align-items: center;      /* alinha verticalmente */
+      justify-content: center;  /* centraliza horizontalmente */
+      gap: 12px;                /* espaço entre logo e texto */
+    }
 
     .logo {
-      width: 80px;
-      margin-bottom: 15px;
+      width: 60px;
+      height: auto;
+      display: block;
+    }
+
+    .logo h2 {
+      color: black;
     }
 
     h2 {

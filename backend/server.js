@@ -1,63 +1,75 @@
-const express = require("express");
-const connectToMongo = require("./conexao"); // Importa a função de conexão
-const cors = require("cors"); // 🔹 Novo da Reorganização (1) ()
+// backend/server.js (ES Modules)
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+
+// Tente usar a estrutura atual (/backend/src). Se você mover para /backend/routes,
+// basta ajustar o caminho do import abaixo para './routes/usuarios.js'.
+import usuariosRoutes from './src/routes/usuarios.js';
 
 const app = express();
-const port = 3000; // Use uma porta diferente da do MongoDB
 
-app.use(cors()); // 🔹 Novo da Reorganização (1)
+/* =========================
+   Configuração de CORS
+   ========================= */
+const DEFAULT_ORIGIN = 'http://localhost:3000';
+const allowedOrigins = (process.env.CORS_ORIGIN || DEFAULT_ORIGIN)
+  .split(',')
+  .map(s => s.trim());
+
+app.use(cors({
+  origin: (origin, cb) => {
+    // Permite chamadas do dev server (sem origin) e da lista configurada
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+}));
+
 app.use(express.json());
+app.set('trust proxy', true);
 
-let db; // Variável para armazenar a conexão com o banco de dados
-
-// Função para iniciar o servidor
-async function startServer() {
-    // Conecta ao MongoDB antes de iniciar o servidor
-    db = await connectToMongo();
-
-    if (!db) {
-        console.error('Não foi possível conectar ao banco de dados. O servidor não será iniciado.');
-        return;
-    }
-
-    // --- Rotas da API ---
-
-    // Rota GET de teste
-    app.get("/", (req, res) => {
-        res.send("Servidor Express rodando!");
-    });
-
-    // Rota POST para adicionar um documento
-    app.post("/documentos", async (req, res) => {
-        try {
-            const collection = db.collection("site");
-            const novoDoc = req.body;
-            const result = await collection.insertOne(novoDoc);
-            res.status(201).json({ 
-                mensagem: "Documento adicionado!", 
-                documento: result.insertedId // Retorna o documento inserido
-            });
-        } catch (error) {
-            res.status(500).json({ mensagem: "Erro ao adicionar documento.", erro: error.message });
-        }
-    });
-
-    // Rota GET para buscar todos os documentos
-    app.get("/documentos", async (req, res) => {
-        try {
-            const collection = db.collection("site");
-            const documentos = await collection.find({}).toArray();
-            res.status(200).json(documentos);
-        } catch (error) {
-            res.status(500).json({ mensagem: "Erro ao buscar documentos.", erro: error.message });
-        }
-    });
-
-    // Inicia o servidor Express na porta 3000
-    app.listen(port, () => {
-        console.log(`Servidor rodando em http://localhost:${port}`);
-    });
+/* =========================
+   Conexão MongoDB (Atlas)
+   ========================= */
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+  console.error('❌ Defina MONGODB_URI no .env do backend.');
+  process.exit(1);
 }
 
-// Chama a função para iniciar o servidor
-startServer();
+mongoose.set('strictQuery', true);
+mongoose.connect(MONGODB_URI, {
+  // useNewUrlParser/useUnifiedTopology não são mais necessários nas versões recentes
+})
+  .then(() => console.log('✅ MongoDB conectado'))
+  .catch(err => {
+    console.error('❌ Erro ao conectar no MongoDB:', err.message);
+    process.exit(1);
+  });
+
+/* =========================
+   Rotas
+   ========================= */
+
+// Healthcheck
+app.get('/api/health', (_req, res) => {
+  res.json({
+    ok: true,
+    time: new Date().toISOString(),
+    cors: allowedOrigins,
+  });
+});
+
+// Monte as rotas de usuários (conforme seus arquivos enviados)
+app.use('/api/usuarios', usuariosRoutes);
+
+/* =========================
+   Inicialização
+   ========================= */
+const PORT = Number(process.env.PORT || 8080);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 API rodando em http://localhost:${PORT}`);
+  console.log(`🔓 CORS liberado para: ${allowedOrigins.join(', ')}`);
+});

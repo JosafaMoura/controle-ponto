@@ -1,12 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 import logo from "../imagens/logo/Logotipo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import { StarPasswordInput } from "./CriarConta"; // se quiser usar o campo com '*'
 
 export default function Login() {
   const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
-  const navigate = useNavigate();
 
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
@@ -18,12 +17,9 @@ export default function Login() {
     try {
       const payload = { usuario, senha };
       await axios.post(`${API}/api/usuarios/login`, payload);
-
-      // ✅ sucesso → guarda e redireciona
-      const ts = new Date().toISOString();
-      localStorage.setItem("auth_user", usuario);
-      localStorage.setItem("auth_login_ts", ts);
-      navigate("/controle-de-ponto");
+      // sucesso → redirecione para a área logada
+      // ex.: window.location.href = "/dashboard";
+      console.log("Login OK");
     } catch (err) {
       // mostra erro por 3s
       setErro(true);

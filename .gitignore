@@ -15,7 +15,7 @@ pnpm-debug.log*
 .vscode/
 
 # Ignorar arquivos de configuração local
-.env
+*.env
 
 #Ignorar arquivos dist
 dist/

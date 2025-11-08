@@ -1,23 +1,36 @@
-
 import logo from "../imagens/logo/Logotipo.png";
+
 function Login() {
   return (
     <div className="login-container">
       <div className="header">
         <img src={logo} alt="Logo" className="logo" />
         <h2>Grupo Locar</h2>
-      </div> 
+      </div>
       <h3>Insira seu E-mail e Senha</h3>
 
       <form>
         <div className="campo">
           <label htmlFor="usuario">E-mail:</label>
-          <input type="text" id="usuario" placeholder="endereço@email.com" required />
+          <input
+            type="text"
+            id="usuario"
+            placeholder="endereço@email.com"
+            required
+            autoComplete="username"   // ✅ corrige warning e melhora UX
+            inputMode="email"         // ✅ ajuda em teclados móveis
+          />
         </div>
 
         <div className="campo">
           <label htmlFor="senha">Senha:</label>
-          <input type="password" id="senha" placeholder="Senha" required />
+          <input
+            type="password"
+            id="senha"
+            placeholder="Senha"
+            required
+            autoComplete="current-password" // ✅ camelCase correto
+          />
         </div>
 
         <div className="politica">
@@ -35,8 +48,7 @@ function Login() {
           <a href="#">Esqueci minha senha</a> | <a href="#">Criar Conta</a>
         </div>
 
-        
-        <div class="erro-login" id="erro-login">
+        <div className="erro-login" id="erro-login">
           Usuário ou senha incorretos!
         </div>
       </form>
@@ -45,5 +57,3 @@ function Login() {
 }
 
 export default Login;
-
-

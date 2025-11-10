@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/style-dashbord.css";
+import "../css/style-dashboard.css";
 
 export default function Index() {
   return (

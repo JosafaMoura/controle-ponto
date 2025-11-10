@@ -1,10 +1,12 @@
 /* ==========================================================
-   ESTILOS EXCLUSIVOS PARA A PÁGINA DE LOGIN
+   ESTILOS EXCLUSIVOS PARA A PÁGINA DE LOGINbody body.login-page .campo input
    Estes estilos só serão aplicados quando a classe .login-page
    estiver no <body>.
    ========================================================== */
 
 /* Fundo do Login + centralização */
+
+
 body.login-page {
   margin: 0;
   height: 100vh;
@@ -53,17 +55,18 @@ body.login-page h2 {
   color: #333;
 }
 
-/* Inputs gerais */
-body.login-page input {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.3s;
+body.login-page .campo input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
 }
+
 
 body.login-page input:focus {
   border-color: #2a5298;
@@ -122,7 +125,7 @@ body.login-page .campo label {
 
 /* Campo de input ajustado */
 body.login-page .campo input {
-  width: 100%;
+  width: 94%;
   padding: 10px;
   border: 1px solid white;
   background: #ccc;

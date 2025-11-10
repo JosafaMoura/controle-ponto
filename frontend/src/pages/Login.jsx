@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import logo from "../imagens/logo/Logotipo.png";
 import { Link, useNavigate } from "react-router-dom";
-// import { StarPasswordInput } from "./CriarConta"; // se quiser usar o campo com '*'
+import "../css/style.css";
 
 export default function Login() {
   const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
@@ -12,20 +12,28 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState(false);
 
+  // ✅ Ativa estilo exclusivo da página de login
+  useEffect(() => {
+    document.body.classList.add("login-page");
+    return () => {
+      document.body.classList.remove("login-page");
+    };
+  }, []);
+
   async function handleSubmit(e) {
     e.preventDefault();
     setErro(false);
+
     try {
       const payload = { usuario, senha };
       await axios.post(`${API}/api/usuarios/login`, payload);
 
-      // ✅ sucesso → guarda e redireciona
-      const ts = new Date().toISOString();
+      // ✅ Sucesso
       localStorage.setItem("auth_user", usuario);
-      localStorage.setItem("auth_login_ts", ts);
+      localStorage.setItem("auth_login_ts", new Date().toISOString());
+
       navigate("/controle-de-ponto");
     } catch (err) {
-      // mostra erro por 3s
       setErro(true);
       setTimeout(() => setErro(false), 3000);
     }
@@ -46,7 +54,7 @@ export default function Login() {
           <input
             type="text"
             id="usuario"
-            placeholder="endereço@email.com"
+            placeholder="endereco@email.com"
             required
             autoComplete="username"
             inputMode="email"
@@ -57,8 +65,6 @@ export default function Login() {
 
         <div className="campo">
           <label htmlFor="senha">Senha:</label>
-
-          {/* Opção A (recomendada): campo password nativo */}
           <input
             type="password"
             id="senha"
@@ -68,15 +74,6 @@ export default function Login() {
             value={senha}
             onChange={(e) => setSenha(e.target.value.slice(0, 16))}
           />
-
-          {/* Opção B (se quiser ver '*' por caractere):
-          <StarPasswordInput
-            id="senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
-          */}
         </div>
 
         <div className="politica">
@@ -91,22 +88,21 @@ export default function Login() {
         <button type="submit" className="btn-login">Entrar</button>
 
         <div className="links">
-          {/* <a href="/criar-conta">Criar Conta</a> */}
           <Link to="/criar-conta">Criar Conta</Link>
         </div>
 
-        <div
-          className="erro-login"
-          id="erro-login"
-          style={{
-            display: erro ? "block" : "none",
-            color: "crimson",
-            marginTop: 8,
-            fontWeight: 600
-          }}
-        >
-          Usuário ou senha incorretos!
-        </div>
+        {erro && (
+          <div
+            className="erro-login"
+            style={{
+              color: "crimson",
+              marginTop: 8,
+              fontWeight: 600,
+            }}
+          >
+            Usuário ou senha incorretos!
+          </div>
+        )}
       </form>
     </div>
   );

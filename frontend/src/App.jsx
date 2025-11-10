@@ -1,14 +1,16 @@
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+
 import Login from "./pages/Login";
 import CriarConta from "./pages/CriarConta";
 import ControleDePonto from "./pages/ControleDePonto";
-import "./css/style.css";
+import Index from "./pages/index.jsx"; // ✅ Dashboard
 
 const router = createBrowserRouter(
   [
     { path: "/", element: <Login /> },
     { path: "/criar-conta", element: <CriarConta /> },
     { path: "/controle-de-ponto", element: <ControleDePonto /> },
+    { path: "/dashboard", element: <Index /> },
     { path: "*", element: <Navigate to="/" replace /> }
   ],
   {

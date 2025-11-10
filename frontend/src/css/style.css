@@ -1,117 +1,127 @@
-* {
-      box-sizing: border-box;
-      font-family: "Segoe UI", sans-serif;
-    }
+/* ==========================================================
+   ESTILOS EXCLUSIVOS PARA A PÁGINA DE LOGIN
+   Estes estilos só serão aplicados quando a classe .login-page
+   estiver no <body>.
+   ========================================================== */
 
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #040404, #0571F4);
-    }
-
-    .login-container {
-      background-color: #fff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-    }
-    .login-container h3 {
-      color: black;
-    }
-
-    .header {
-      display: flex;
-      flex-direction: row;      /* lado a lado */
-      align-items: center;      /* alinha verticalmente */
-      justify-content: center;  /* centraliza horizontalmente */
-      gap: 12px;                /* espaço entre logo e texto */
-    }
-
-    .logo {
-      width: 60px;
-      height: auto;
-      display: block;
-    }
-
-    .logo h2 {
-      color: black;
-    }
-
-    h2 {
-      margin-bottom: 25px;
-      color: #333;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.3s;
-    }
-
-    input:focus {
-      border-color: #2a5298;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #040404;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #181893;
-    }
-
-    .links {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .links a {
-      color: #0571F4;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .links a:hover {
-      color: #1e3c72;
-    }
-
-    /* ======== CAMPOS DO FORMULÁRIO ======== */
-.campo {
+/* Fundo do Login + centralização */
+body.login-page {
+  margin: 0;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;/* 🔹 Deixa o título à esquerda */
-  margin-bottom: 15px;
-  text-align: left; /* Garante que todo o texto fique alinhado à esquerda */
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #040404, #0571F4);
+  font-family: "Segoe UI", sans-serif;
 }
 
-.campo label {
+/* Container do formulário */
+body.login-page .login-container {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+/* Subtítulo */
+body.login-page .login-container h3 {
+  color: black;
+}
+
+/* Header com logo + título */
+body.login-page .header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Logo */
+body.login-page .logo {
+  width: 60px;
+  height: auto;
+  display: block;
+}
+
+/* Título ao lado da logo */
+body.login-page h2 {
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Inputs gerais */
+body.login-page input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+body.login-page input:focus {
+  border-color: #2a5298;
+}
+
+/* Botão */
+body.login-page button {
+  width: 100%;
+  padding: 12px;
+  background-color: #040404;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+body.login-page button:hover {
+  background-color: #181893;
+}
+
+/* Links (Criar conta) */
+body.login-page .links {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+body.login-page .links a {
+  color: #0571F4;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+body.login-page .links a:hover {
+  color: #1e3c72;
+}
+
+/* Campo de formulário */
+body.login-page .campo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+/* Labels */
+body.login-page .campo label {
   font-size: 14px;
   font-weight: bold;
   color: #333;
   margin-bottom: 5px;
 }
 
-.campo input {
+/* Campo de input ajustado */
+body.login-page .campo input {
   width: 100%;
   padding: 10px;
   border: 1px solid white;
@@ -121,40 +131,40 @@
   transition: border-color 0.3s;
 }
 
-.campo input:focus {
+body.login-page .campo input:focus {
   border-color: #007bff;
-  outline: none;
 }
 
-/* ======== CHECKBOX DE POLÍTICA ======== */
-.politica {
+/* Checkbox */
+body.login-page .politica {
   display: flex;
   gap: 8px;
   font-size: 13px;
   color: #333;
-  margin: 10px 0 10px 0;
-  text-align: left;
+  margin: 10px 0;
 }
 
-.politica input[type="checkbox"] {
+body.login-page .politica input[type="checkbox"] {
   margin-top: 3px;
   width: 20px;
   height: 20px;
-  margin-left: 5px;
   cursor: pointer;
-  accent-color: #040404; /* 🔹 cor azul moderna do checkbox */
+  accent-color: #040404;
 }
 
-.politica a {
+/* Links dentro da política */
+body.login-page .politica a {
   color: #040404;
   text-decoration: none;
   font-weight: 500;
 }
 
-.politica a:hover {
+body.login-page .politica a:hover {
   text-decoration: underline;
 }
-.erro-login {
+
+/* Erro */
+body.login-page .erro-login {
   color: red;
   text-align: center;
 }

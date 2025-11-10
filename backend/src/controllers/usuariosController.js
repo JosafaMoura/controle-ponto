@@ -1,5 +1,6 @@
-// backend/src/controllers/usuariosController.js
+// backend/src/controllers/usuariosController.js export async function loginUsuario
 import Usuario from "../models/Usuario.js";
+import { emailTransporter } from "../services/emailService.js"; //Importando o aquivo service.js 
 
 export async function criarUsuario(req, res) {
   try {
@@ -45,8 +46,30 @@ export async function loginUsuario(req, res) {
     const ok = await u.compareSenha(senha);
     if (!ok) return res.status(401).json({ error: "Usuário ou senha incorretos." });
 
-    // Se quiser emitir JWT, aqui é o ponto; por ora apenas OK
+    /* =========================
+       ✅ Envio do e-mail
+    ========================= */
+    try {
+      await emailTransporter.sendMail({
+        from: `"Controle de Ponto" <${process.env.MAIL_USER}>`,
+        to: "EMAIL_DO_USUARIO_AQUI", // depois vamos usar o email real
+        subject: "Novo login detectado",
+        html: `
+          <h3>Olá, ${u.usuario}</h3>
+          <p>Acabou de ocorrer um login na sua conta.</p>
+          <p><strong>Data:</strong> ${new Date().toLocaleString("pt-BR")}</p>
+          <p>Se não foi você, entre em contato com o suporte.</p>
+        `,
+      });
+    } catch (emailErr) {
+      console.error("Erro ao enviar email:", emailErr.message);
+    }
+
+    /* =========================
+       ✅ Retorno final
+    ========================= */
     return res.status(200).json({ message: "Login OK", usuario: u.usuario });
+
   } catch (err) {
     return res.status(500).json({ error: "Erro no login." });
   }

@@ -2,23 +2,15 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-// Utils locais (protegem acento/ç e formatos quando usados)
+// Utils (mantidos)
 function removeDiacritics(str = "") {
-  return str
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .replace(/ç/gi, "c");
-}
-function onlyLetters(str = "") {
-  return /^[A-Za-z]+$/.test(str);
+  return str.normalize("NFD").replace(/\p{Diacritic}/gu, "").replace(/ç/gi, "c");
 }
 function onlyLettersAndDigits(str = "") {
   return /^[A-Za-z0-9\s]+$/.test(str);
 }
 function toTitleCaseNoDiacritics(str = "") {
-  const s = removeDiacritics(str)
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, "");
+  const s = removeDiacritics(str).toLowerCase().replace(/[^a-z0-9\s]/g, "");
   return s.replace(/\S+/g, (w) => (w[0] ? w[0].toUpperCase() + w.slice(1) : w));
 }
 function sanitizeUsuario(str = "") {
@@ -42,23 +34,23 @@ const UsuarioSchema = new mongoose.Schema(
       maxlength: 12,
       validate: {
         validator: (v) => /^[a-z]{1,12}$/.test(v),
-        message: "usuario deve conter apenas letras minúsculas (1 a 12)."
-      }
+        message: "usuario deve conter apenas letras minúsculas (1 a 12).",
+      },
     },
     senhaHash: {
       type: String,
-      required: true
+      required: true,
     },
 
-    // --- Campos adicionais mantidos, porém OPCIONAIS (não quebram cadastro simples) ---
+    // --- Campos adicionais opcionais (mantidos) ---
     endereco: {
       type: String,
       required: false,
       maxlength: 35,
       validate: {
         validator: (v) => (v == null || v === "" ? true : onlyLettersAndDigits(v)),
-        message: "endereco deve conter apenas letras e números (sem símbolos)."
-      }
+        message: "endereco deve conter apenas letras e números (sem símbolos).",
+      },
     },
     cidade: {
       type: String,
@@ -66,8 +58,8 @@ const UsuarioSchema = new mongoose.Schema(
       maxlength: 20,
       validate: {
         validator: (v) => (v == null || v === "" ? true : onlyLettersAndDigits(v)),
-        message: "cidade deve conter apenas letras e números (sem símbolos)."
-      }
+        message: "cidade deve conter apenas letras e números (sem símbolos).",
+      },
     },
     bairro: {
       type: String,
@@ -75,8 +67,8 @@ const UsuarioSchema = new mongoose.Schema(
       maxlength: 20,
       validate: {
         validator: (v) => (v == null || v === "" ? true : onlyLettersAndDigits(v)),
-        message: "bairro deve conter apenas letras e números (sem símbolos)."
-      }
+        message: "bairro deve conter apenas letras e números (sem símbolos).",
+      },
     },
     estado: {
       type: String,
@@ -85,36 +77,37 @@ const UsuarioSchema = new mongoose.Schema(
       maxlength: 2,
       validate: {
         validator: (v) => (v == null || v === "" ? true : /^[A-Z]{2}$/.test(v)),
-        message: "estado deve conter exatamente 2 letras maiúsculas."
-      }
+        message: "estado deve conter exatamente 2 letras maiúsculas.",
+      },
     },
     cep: {
       type: String,
       required: false,
       validate: {
         validator: (v) => (v == null || v === "" ? true : /^\d{2}\.\d{3}-\d{3}$/.test(v)),
-        message: "cep deve estar no formato 99.999-999."
-      }
-    }
+        message: "cep deve estar no formato 99.999-999.",
+      },
+    },
   },
-  { timestamps: true, collection: "usuarios" }
+  {
+    timestamps: true,
+    // 👇 força a coleção singular
+    collection: "usuario",
+  }
 );
 
-// Normalizações apenas se os campos existirem
+// Normalizações
 UsuarioSchema.pre("validate", function (next) {
-  // usuario obrigatório
   this.usuario = sanitizeUsuario(this.usuario);
-
-  // opcionais: só normaliza se vierem
   if (this.endereco) this.endereco = toTitleCaseNoDiacritics(this.endereco).slice(0, 35);
-  if (this.cidade)   this.cidade   = toTitleCaseNoDiacritics(this.cidade).slice(0, 20);
-  if (this.bairro)   this.bairro   = toTitleCaseNoDiacritics(this.bairro).slice(0, 20);
-
+  if (this.cidade) this.cidade = toTitleCaseNoDiacritics(this.cidade).slice(0, 20);
+  if (this.bairro) this.bairro = toTitleCaseNoDiacritics(this.bairro).slice(0, 20);
   if (this.estado) this.estado = sanitizeEstado(this.estado);
-
   if (this.cep) {
     const digits = extractDigits(this.cep).slice(0, 8);
-    this.cep = /^\d{8}$/.test(digits) ? `${digits.slice(0,2)}.${digits.slice(2,5)}-${digits.slice(5)}` : this.cep;
+    this.cep = /^\d{8}$/.test(digits)
+      ? `${digits.slice(0, 2)}.${digits.slice(2, 5)}-${digits.slice(5)}`
+      : this.cep;
   }
   next();
 });

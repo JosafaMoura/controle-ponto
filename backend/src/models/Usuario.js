@@ -39,7 +39,7 @@ const UsuarioSchema = new mongoose.Schema(
     },
     senhaHash: {
       type: String,
-      required: false,
+      required: true,
     },
 
     // --- Campos adicionais opcionais (mantidos) ---

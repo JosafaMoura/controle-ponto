@@ -13,7 +13,6 @@ export default function CriarConta() {
   const [senha, setSenha] = useState("");
   const [msg, setMsg] = useState(null);
 
-  // ✅ aplica o mesmo estilo do login-page
   useEffect(() => {
     document.body.classList.add("login-page");
     return () => document.body.classList.remove("login-page");
@@ -29,24 +28,34 @@ export default function CriarConta() {
     }
 
     try {
+      // 1️⃣ Criar usuário
       await axios.post(`${API}/api/usuarios`, {
         usuario,
         senha
       });
 
-      Swal.fire("Sucesso", "Usuário criado com sucesso!", "success");
+      // 2️⃣ Login automático
+      const resp = await axios.post(`${API}/api/usuarios/login`, {
+        usuario,
+        senha
+      });
 
-      setUsuario("");
-      setSenha("");
+      // 3️⃣ Salvar sessão igual ao Login.jsx
+      localStorage.setItem("auth_user", resp.data.usuario);
+      localStorage.setItem("auth_login_ts", new Date().toISOString());
+
+      // 4️⃣ Redirecionar para o Dashboard
+      Swal.fire("Conta criada!", "Bem-vindo ao sistema!", "success");
+
+      navigate("/dashboard");
+
     } catch (err) {
-      Swal.fire("Erro", "Falha ao criar usuário", "error");
+      Swal.fire("Erro", "Usuário já existe ou houve falha na criação.", "error");
     }
   }
 
   return (
     <div className="login-container">
-      
-      {/* HEADER IDENTICO AO LOGIN */}
       <div className="header">
         <img src={logo} alt="Logo" className="logo" />
         <h2>Grupo Locar</h2>
@@ -55,16 +64,17 @@ export default function CriarConta() {
       <h3>Criar uma nova conta</h3>
 
       <form onSubmit={handleSubmit}>
-
         <div className="campo">
           <label htmlFor="usuario">Usuário:</label>
           <input
             id="usuario"
             type="text"
             placeholder="Digite um usuário"
-            maxLength="12"
+            maxLength="32"
             value={usuario}
-            onChange={(e) => setUsuario(e.target.value.toLowerCase())}
+            onChange={(e) =>
+              setUsuario(e.target.value.toLowerCase())
+            }
           />
         </div>
 
@@ -91,7 +101,6 @@ export default function CriarConta() {
         <div className="links">
           <Link to="/">Voltar para Login</Link>
         </div>
-
       </form>
     </div>
   );

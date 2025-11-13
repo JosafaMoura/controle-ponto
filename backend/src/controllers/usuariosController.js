@@ -1,23 +1,26 @@
-// backend/src/controllers/usuariosController.js export async function loginUsuario
-import Usuario from "../models/Usuario.js";
-import { emailTransporter } from "../services/emailService.js"; //Importando o aquivo service.js 
+// backend/src/controllers/usuariosController.js
 
+import Usuario from "../models/Usuario.js";
+import TokenReset from "../models/TokenReset.js";
+import crypto from "crypto";
+import { emailTransporter } from "../services/emailService.js";
+
+/* ============================================================
+   CRIAR USUÁRIO
+=============================================================== */
 export async function criarUsuario(req, res) {
   try {
     const { usuario, senha } = req.body;
 
-    // Agora só exigimos usuario e senha
     if (!usuario || !senha) {
       return res.status(400).json({ error: "Informe usuario e senha." });
     }
 
-    // Checa duplicidade
     const jaExiste = await Usuario.findOne({ usuario: (usuario || "").toLowerCase() });
     if (jaExiste) {
       return res.status(409).json({ error: "Usuário já existe." });
     }
 
-    // Cria somente com usuario e senha
     const u = new Usuario({ usuario });
     await u.setSenha(senha);
     await u.validate();
@@ -35,6 +38,9 @@ export async function criarUsuario(req, res) {
   }
 }
 
+/* ============================================================
+   LOGIN
+=============================================================== */
 export async function loginUsuario(req, res) {
   try {
     const { usuario, senha } = req.body;
@@ -46,13 +52,11 @@ export async function loginUsuario(req, res) {
     const ok = await u.compareSenha(senha);
     if (!ok) return res.status(401).json({ error: "Usuário ou senha incorretos." });
 
-    /* =========================
-       ✅ Envio do e-mail
-    ========================= */
+    // EMAIL DE LOGIN (mantido exatamente igual ao seu)
     try {
       await emailTransporter.sendMail({
         from: `"Controle de Ponto" <${process.env.MAIL_USER}>`,
-        to: "EMAIL_DO_USUARIO_AQUI", // depois vamos usar o email real
+        to: "EMAIL_DO_USUARIO_AQUI",
         subject: "Novo login detectado",
         html: `
           <h3>Olá, ${u.usuario}</h3>
@@ -65,12 +69,81 @@ export async function loginUsuario(req, res) {
       console.error("Erro ao enviar email:", emailErr.message);
     }
 
-    /* =========================
-       ✅ Retorno final
-    ========================= */
     return res.status(200).json({ message: "Login OK", usuario: u.usuario });
 
   } catch (err) {
     return res.status(500).json({ error: "Erro no login." });
+  }
+}
+
+/* ============================================================
+   🔵 SOLICITAR RECUPERAÇÃO DE SENHA (NOVO)
+=============================================================== */
+export async function solicitarResetSenha(req, res) {
+  try {
+    const { usuario } = req.body;
+
+    const u = await Usuario.findOne({ usuario });
+    if (!u) return res.status(404).json({ error: "Usuário não encontrado." });
+
+    // gerar token
+    const token = crypto.randomBytes(32).toString("hex");
+
+    // salvar no banco
+    await TokenReset.create({
+      usuarioId: u._id,
+      token,
+      expiresAt: Date.now() + 3600000, // 1 hora
+    });
+
+    const link = `${process.env.FRONT_URL}/resetar-senha/${token}`;
+
+    // enviar email
+    await emailTransporter.sendMail({
+      from: `"Grupo Locar" <${process.env.MAIL_USER}>`,
+      to: usuario,
+      subject: "Recuperação de Senha",
+      html: `
+        <h3>Recuperação de Senha</h3>
+        <p>Clique no link abaixo para redefinir sua senha:</p>
+        <a href="${link}">Redefinir Senha</a>
+        <p>Este link é válido por 1 hora e só pode ser usado uma vez.</p>
+      `,
+    });
+
+    return res.json({ message: "E-mail enviado com sucesso." });
+
+  } catch (err) {
+    return res.status(500).json({ error: "Erro ao solicitar reset." });
+  }
+}
+
+/* ============================================================
+   🔵 REDEFINIR SENHA COM TOKEN (NOVO)
+=============================================================== */
+export async function redefinirSenha(req, res) {
+  try {
+    const { token } = req.params;
+    const { novaSenha } = req.body;
+
+    const t = await TokenReset.findOne({ token });
+
+    if (!t) return res.status(400).json({ error: "Token inválido." });
+    if (t.usado) return res.status(400).json({ error: "Token já utilizado." });
+    if (t.expiresAt < Date.now()) return res.status(400).json({ error: "Token expirado." });
+
+    const u = await Usuario.findById(t.usuarioId);
+    if (!u) return res.status(404).json({ error: "Usuário não encontrado." });
+
+    await u.setSenha(novaSenha);
+    await u.save();
+
+    t.usado = true;
+    await t.save();
+
+    return res.json({ message: "Senha redefinida com sucesso." });
+
+  } catch (err) {
+    return res.status(500).json({ error: "Erro ao redefinir senha." });
   }
 }

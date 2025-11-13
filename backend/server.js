@@ -42,21 +42,6 @@ if (!MONGODB_URI) {
 
 mongoose.set("strictQuery", true);
 
-mongoose
-  .connect(MONGODB_URI, {
-    // forçamos o db alvo mesmo que a URI não tenha o path correto
-    ...(DB_NAME ? { dbName: DB_NAME } : {}),
-  })
-  .then(() => {
-    const conn = mongoose.connection;
-    console.log("✅ MongoDB conectado");
-    console.log(`🗄️  Banco atual: ${conn.name}`);
-  })
-  .catch((err) => {
-    console.error("❌ Erro ao conectar no MongoDB:", err.message);
-    process.exit(1);
-  });
-
 /* =========================
    Rotas
    ========================= */
@@ -77,8 +62,43 @@ app.use("/api/usuarios", usuariosRoutes);
 /* =========================
    Inicialização
    ========================= */
-const PORT = Number(process.env.PORT || 8080);
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 API rodando em http://localhost:${PORT}`);
-  console.log(`🔓 CORS liberado para: ${allowedOrigins.join(", ")}`);
-});
+
+async function startServer() {
+  try {
+    // Tenta conectar no MongoDB primeiro
+    await mongoose.connect(MONGODB_URI, {
+      ...(DB_NAME ? { dbName: DB_NAME } : {}),
+      // evita ficar "pendurado" muito tempo tentando selecionar o servidor
+      serverSelectionTimeoutMS: 15000,
+    });
+
+    const conn = mongoose.connection;
+    console.log("✅ MongoDB conectado");
+    console.log(`🗄️  Banco atual: ${conn.name}`);
+
+    const PORT = Number(process.env.PORT || 8080);
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 API rodando em http://localhost:${PORT}`);
+      console.log(`🔓 CORS liberado para: ${allowedOrigins.join(", ")}`);
+    });
+  } catch (err) {
+    console.error("❌ Erro ao conectar no MongoDB:", err.message);
+
+    // Ajuda a entender quando o problema é de DNS/rede (caso do outro notebook)
+    if (
+      err?.name === "MongoServerSelectionError" &&
+      /ETIMEOUT|ENOTFOUND|EAI_AGAIN|queryTxt/i.test(err.message || "")
+    ) {
+      console.error(
+        "💡 Dica: Esse erro normalmente é de DNS/rede. " +
+          "Teste `nslookup grupolocar.igzhyps.mongodb.net` no PowerShell " +
+          "e verifique DNS (8.8.8.8/1.1.1.1), firewall, VPN e bloqueios de porta 27017."
+      );
+    }
+
+    process.exit(1);
+  }
+}
+
+// Inicia tudo
+startServer();

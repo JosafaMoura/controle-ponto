@@ -12,7 +12,7 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState(false);
 
-  // ✅ Ativa estilo exclusivo da página de login
+  // Estilo exclusivo da página de Login
   useEffect(() => {
     document.body.classList.add("login-page");
     return () => {
@@ -26,13 +26,17 @@ export default function Login() {
 
     try {
       const payload = { usuario, senha };
-      await axios.post(`${API}/api/usuarios/login`, payload);
 
-      // ✅ Sucesso
-      localStorage.setItem("auth_user", usuario);
+      // Faz login e obtém a resposta do backend
+      const resp = await axios.post(`${API}/api/usuarios/login`, payload);
+
+      // Salva o usuário vindo DA API, não o digitado
+      localStorage.setItem("auth_user", resp.data.usuario);
       localStorage.setItem("auth_login_ts", new Date().toISOString());
 
-      navigate("/controle-de-ponto");
+      // Redireciona para o DASHBOARD do CRM
+      navigate("/dashboard");
+
     } catch (err) {
       setErro(true);
       setTimeout(() => setErro(false), 3000);
@@ -54,7 +58,7 @@ export default function Login() {
           <input
             type="text"
             id="usuario"
-            placeholder="endereco@email.com"
+            placeholder="email@example.com"
             required
             autoComplete="username"
             inputMode="email"
@@ -88,7 +92,8 @@ export default function Login() {
         <button type="submit" className="btn-login">Entrar</button>
 
         <div className="links">
-          <Link to="/criar-conta">Criar Conta</Link>
+          <Link to="/criar-conta">Criar Conta</Link> |{" "}
+          <Link to="/recuperar">Esqueci a senha</Link>
         </div>
 
         {erro && (
@@ -107,3 +112,4 @@ export default function Login() {
     </div>
   );
 }
+

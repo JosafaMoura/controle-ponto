@@ -276,3 +276,72 @@ body {
     flex-direction: column;
   }
 }
+
+
+/* ===== MENU LATERAL ===== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+  padding: 20px;
+  transition: transform 0.35s ease-in-out;
+  z-index: 999;
+  transform: translateX(100%); /* 100% para FORA DA TELA (sumido) */
+  overflow-y: auto;
+}
+
+/* Quando abrir */
+.sidebar.open {
+  transform: translateX(0); /* volta suavemente pra tela */
+}
+
+/* Botão X */
+.sidebar .close-btn {
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+  text-align: right;
+  margin-bottom: 15px;
+  line-height: 20px;
+}
+
+/* Lista */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 14px 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  color: #333;
+}
+
+.sidebar ul li:hover {
+  background: #f0f0f0;
+}
+
+.logout-btn {
+  color: red !important;
+  font-weight: bold;
+}
+
+/* FUNDO ESCURO (fecha ao clicar fora) */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(1px);
+  z-index: 990;
+}

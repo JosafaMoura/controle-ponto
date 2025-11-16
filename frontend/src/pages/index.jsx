@@ -1,27 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/style-dashboard.css";
 
 export default function Index() {
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [gestaoOpen, setGestaoOpen] = useState(false);
+
+  function logout() {
+    localStorage.removeItem("auth_user");
+    localStorage.removeItem("auth_login_ts");
+    navigate("/");
+  }
+
   return (
     <div className="dashboard">
 
+      {/* ------- TOPBAR ------- */}
       <header className="topbar">
         <div className="logo-icon">
           <span className="car-icon">🚗</span>
           <h1>Grupo Locar</h1>
         </div>
 
-        <nav className="menu">
-          <a href="#">Gestão de Ponto</a>
-          <a href="#">Relatórios</a>
-          <a href="#">Cadastro</a>
-        </nav>
-
-        <div className="menu-icon">☰</div>
+        {/* ÍCONE HAMBÚRGUER */}
+        <div className="menu-icon" onClick={() => setMenuOpen(true)}>☰</div>
       </header>
 
-      <main>
+      {/* ------- MENU LATERAL ------- */}
+      <aside className={`sidebar ${menuOpen ? "open" : ""}`}>
+        {/* Botão X */}
+        <div className="close-btn" onClick={() => setMenuOpen(false)}>×</div>
 
+        <ul>
+          <li onClick={() => setGestaoOpen(!gestaoOpen)}>
+            Gestão de Ponto {gestaoOpen ? "▲" : "▼"}
+          </li>
+
+          {gestaoOpen && (
+            <>
+              <li onClick={() => { navigate("/controle-de-ponto"); setMenuOpen(false); }}>Controle de ponto</li>
+              <li>Solicitações de ajustes</li>
+              <li>Banco de horas</li>
+              <li>Afastamento de férias</li>
+              <li>Escala de folgas</li>
+              <li>Espelho de ponto</li>
+              <li>Sobreaviso</li>
+            </>
+          )}
+
+          <li>Relatórios</li>
+          <li>Cadastro</li>
+          <li onClick={logout} className="logout-btn">Sair</li>
+        </ul>
+      </aside>
+
+      {/* BACKDROP — fecha ao clicar fora */}
+      {menuOpen && (
+        <div className="backdrop" onClick={() => setMenuOpen(false)}></div>
+      )}
+
+      {/* ------- CONTEÚDO PRINCIPAL ------- */}
+      <main>
         <section className="saudacao">
           <div className="msg">
             <h2>Bom dia!</h2>
@@ -79,7 +119,6 @@ export default function Index() {
             <p>Ausentes: <strong>0</strong></p>
           </div>
         </section>
-
       </main>
     </div>
   );

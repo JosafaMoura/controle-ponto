@@ -4,8 +4,9 @@ import "../css/style-dashboard.css";
 
 export default function Index() {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [gestaoOpen, setGestaoOpen] = useState(false);
+
+  const [menuOpen, setMenuOpen] = useState(false);   // menu lateral (mobile)
+  const [gestaoOpen, setGestaoOpen] = useState(false); // dropdown Gestão de Ponto (desktop + mobile)
 
   function logout() {
     localStorage.removeItem("auth_user");
@@ -13,49 +14,90 @@ export default function Index() {
     navigate("/");
   }
 
+  // Itens de Gestão de Ponto (reutilizados desktop + mobile)
+  const gestaoItens = (
+    <>
+      <li onClick={() => { navigate("/controle-de-ponto"); setMenuOpen(false); }}>
+        Controle de ponto
+      </li>
+      <li>Solicitações de ajustes</li>
+      <li>Banco de horas</li>
+      <li>Afastamento de férias</li>
+      <li>Escala de folgas</li>
+      <li>Espelho de ponto</li>
+      <li>Sobreaviso</li>
+    </>
+  );
+
   return (
     <div className="dashboard">
-
-      {/* ------- TOPBAR ------- */}
+      {/* ------- TOPO ------- */}
       <header className="topbar">
         <div className="logo-icon">
           <span className="car-icon">🚗</span>
           <h1>Grupo Locar</h1>
         </div>
 
-        {/* ÍCONE HAMBÚRGUER */}
-        <div className="menu-icon" onClick={() => setMenuOpen(true)}>☰</div>
+        {/* MENU DESKTOP / TABLET */}
+        <nav className="menu">
+          <div
+            className="menu-item"
+            onMouseLeave={() => setGestaoOpen(false)}
+          >
+            <button
+              type="button"
+              className="menu-button"
+              onClick={() => setGestaoOpen(!gestaoOpen)}
+            >
+              Gestão de Ponto ▾
+            </button>
+
+            {gestaoOpen && (
+              <div className="menu-dropdown">
+                <ul onClick={() => setGestaoOpen(false)}>
+                  {gestaoItens}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          <button type="button" className="menu-button">
+            Relatórios
+          </button>
+
+          <button type="button" className="menu-button">
+            Cadastro
+          </button>
+        </nav>
+
+        {/* ÍCONE HAMBÚRGUER (SÓ MOBILE – controlado via CSS) */}
+        <div className="menu-icon" onClick={() => setMenuOpen(true)}>
+          ☰
+        </div>
       </header>
 
-      {/* ------- MENU LATERAL ------- */}
+      {/* ------- MENU LATERAL (MOBILE) ------- */}
       <aside className={`sidebar ${menuOpen ? "open" : ""}`}>
-        {/* Botão X */}
-        <div className="close-btn" onClick={() => setMenuOpen(false)}>×</div>
+        <div className="close-btn" onClick={() => setMenuOpen(false)}>
+          ×
+        </div>
 
         <ul>
           <li onClick={() => setGestaoOpen(!gestaoOpen)}>
             Gestão de Ponto {gestaoOpen ? "▲" : "▼"}
           </li>
 
-          {gestaoOpen && (
-            <>
-              <li onClick={() => { navigate("/controle-de-ponto"); setMenuOpen(false); }}>Controle de ponto</li>
-              <li>Solicitações de ajustes</li>
-              <li>Banco de horas</li>
-              <li>Afastamento de férias</li>
-              <li>Escala de folgas</li>
-              <li>Espelho de ponto</li>
-              <li>Sobreaviso</li>
-            </>
-          )}
+          {gestaoOpen && gestaoItens}
 
           <li>Relatórios</li>
           <li>Cadastro</li>
-          <li onClick={logout} className="logout-btn">Sair</li>
+          <li onClick={logout} className="logout-btn">
+            Sair
+          </li>
         </ul>
       </aside>
 
-      {/* BACKDROP — fecha ao clicar fora */}
+      {/* BACKDROP – fecha ao clicar fora (mobile) */}
       {menuOpen && (
         <div className="backdrop" onClick={() => setMenuOpen(false)}></div>
       )}
@@ -103,23 +145,36 @@ export default function Index() {
         <section className="cards">
           <div className="card">
             <h3>Horas Extras</h3>
-            <p>Total de Horas: <strong>0h</strong></p>
-            <p>Valor Total: <strong style={{ color: "green" }}>R$ 0,00</strong></p>
+            <p>
+              Total de Horas: <strong>0h</strong>
+            </p>
+            <p>
+              Valor Total: <strong style={{ color: "green" }}>R$ 0,00</strong>
+            </p>
           </div>
 
           <div className="card">
             <h3>Intervalo</h3>
-            <p>Em Intervalo: <strong>0</strong></p>
-            <p>Sem Intervalo: <strong>0</strong></p>
+            <p>
+              Em Intervalo: <strong>0</strong>
+            </p>
+            <p>
+              Sem Intervalo: <strong>0</strong>
+            </p>
           </div>
 
           <div className="card">
             <h3>Escala</h3>
-            <p>Presentes: <strong>0</strong></p>
-            <p>Ausentes: <strong>0</strong></p>
+            <p>
+              Presentes: <strong>0</strong>
+            </p>
+            <p>
+              Ausentes: <strong>0</strong>
+            </p>
           </div>
         </section>
       </main>
     </div>
   );
 }
+

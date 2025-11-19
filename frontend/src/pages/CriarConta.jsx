@@ -65,7 +65,7 @@ export default function CriarConta() {
 
       <form onSubmit={handleSubmit}>
         <div className="campo">
-          <label htmlFor="usuario">Usuário:</label>
+          <label htmlFor="usuario">E-Mail:</label>
           <input
             id="usuario"
             type="text"

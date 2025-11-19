@@ -54,7 +54,7 @@ export default function Login() {
 
       <form onSubmit={handleSubmit}>
         <div className="campo">
-          <label htmlFor="usuario">E-mail:</label>
+          <label htmlFor="usuario">E-Mail:</label>
           <input
             type="text"
             id="usuario"

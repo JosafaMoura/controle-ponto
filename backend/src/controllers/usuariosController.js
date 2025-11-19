@@ -44,13 +44,13 @@ export async function criarUsuario(req, res) {
 export async function loginUsuario(req, res) {
   try {
     const { usuario, senha } = req.body;
-    if (!usuario || !senha) return res.status(400).json({ error: "Informe usuario e senha." });
+    if (!usuario || !senha) return res.status(400).json({ error: "Informe e-mail e senha." });
 
     const u = await Usuario.findOne({ usuario: (usuario || "").toLowerCase() });
-    if (!u) return res.status(401).json({ error: "Usuário ou senha incorretos." });
+    if (!u) return res.status(401).json({ error: "E-mail ou senha incorretos." });
 
     const ok = await u.compareSenha(senha);
-    if (!ok) return res.status(401).json({ error: "Usuário ou senha incorretos." });
+    if (!ok) return res.status(401).json({ error: "E-mail ou senha incorretos." });
 
     // EMAIL DE LOGIN (mantido exatamente igual ao seu)
     try {

@@ -27,7 +27,7 @@ html, body {
   width: 100%;
   height: 80px;
   background-color: #fff;
-  padding: 0 230px;
+  padding: 0 40px; /* corrigido */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,7 +38,14 @@ html, body {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-left: 200px; /* alinha exatamente com o main */
 }
+@media (max-width: 768px) {
+  .dashboard .logo-icon {
+    margin-left: 0; /* volta ao centro correto no celular */
+  }
+}
+
 
 .dashboard .car-icon {
   width: 40px;
@@ -130,17 +137,17 @@ html, body {
   margin: 0 auto;
   padding: 20px 32px;
   box-sizing: border-box;
-  overflow: hidden; /* impede scroll interno */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-/* ===================== SAUDAÇÃO (IDÊNTICA AO MODELO) ===================== */
+/* ===================== SAUDAÇÃO ===================== */
 
 .dashboard .saudacao {
   background: #fff;
-  margin-top: 20px;
+  margin-top: 10px;
   padding: 16px 24px;
   height: 150px;
   border-radius: 15px;
@@ -162,7 +169,7 @@ html, body {
   color: #555;
 }
 
-/* Mini cards da saudação */
+/* Mini cards */
 
 .dashboard .cards-mini {
   display: flex;
@@ -184,13 +191,12 @@ html, body {
 
 .dashboard .mini-card span {
   font-size: 28px;
-  margin-bottom: 4px;
-  margin-top: 20px;
+  margin-top: 15px;
 }
+
 .dashboard .mini-card p {
   font-size: 13px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .dashboard .atrasados { border-bottom: 4px solid #e63946; }
@@ -210,10 +216,13 @@ html, body {
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
+.dashboard .filtro {
+  display: flex;
+  flex-direction: column;
+}
+
 .dashboard .filtro label {
-  display: block;
   font-weight: bold;
-  margin-bottom: 4px;
 }
 
 .dashboard select {
@@ -239,12 +248,55 @@ html, body {
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
-.dashboard .card h3 {
+/* Títulos com ícones */
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 0 0 12px 0;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 700;
 }
 
-/* ===================== RESPONSIVO ===================== */
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Horas Extras */
+.horas-icon {
+  background: #ffe9b5;
+  color: #d48c00;
+}
+
+/* Intervalo */
+.intervalo-icon {
+  background: #d8eaff;
+  color: #1d5bad;
+}
+
+/* Escala */
+.escala-icon {
+  background: #dfffe1;
+  color: #2a9d8f;
+}
+
+/* ===== ALINHAMENTO DOS NÚMEROS ===== */
+.card p {
+  display: flex;
+  justify-content: space-between; /* texto esquerda / número direita */
+  align-items: center;
+  font-size: 15px;
+  margin: 6px 0;
+}
+
+/* ===================== MOBILE ===================== */
 
 @media (max-width: 768px) {
   body { overflow-y: auto !important; }
@@ -254,6 +306,7 @@ html, body {
 
   .dashboard main { overflow-y: auto; }
 
+  /* Saudação em coluna */
   .dashboard .saudacao {
     flex-direction: column;
     height: auto;
@@ -270,15 +323,30 @@ html, body {
     height: 100px;
   }
 
-  .dashboard .filtros { height: auto; flex-direction: column; }
+  /* Filtros arrumados */
+  .dashboard .filtros {
+    height: auto !important;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
 
+  .dashboard .filtro {
+    width: 100%;
+  }
+
+  .dashboard select {
+    width: 100%;
+  }
+
+  /* Cards em coluna */
   .dashboard .cards {
     flex-direction: column;
     height: auto;
   }
 }
 
-/* ===================== MENU LATERAL MOBILE ===================== */
+/* ===================== MENU LATERAL ===================== */
 
 .sidebar {
   position: fixed;
@@ -295,9 +363,7 @@ html, body {
   overflow-y: auto;
 }
 
-.sidebar.open {
-  transform: translateX(0);
-}
+.sidebar.open { transform: translateX(0); }
 
 .sidebar .close-btn {
   font-size: 30px;
@@ -336,46 +402,4 @@ html, body {
   z-index: 990;
 }
 
-
-/* Título com ícone */
-.card-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 0 12px 0;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-/* Esqueleto geral do ícone */
-.card-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-/* === CORES PERSONALIZADAS === */
-
-/* Horas Extras – mantém a cor padrão */
-.horas-icon {
-  background: #ffe9b5;     /* amarelo claro */
-  color: #d48c00;          /* amarelo forte */
-}
-
-/* Intervalo – azul claro */
-.intervalo-icon {
-  background: #d8eaff;     /* azul MUITO claro */
-  color: #1d5bad;          /* azul principal do seu tema */
-}
-
-/* Escala – verde claro */
-.escala-icon {
-  background: #dfffe1;     /* verde claro suave */
-  color: #2a9d8f;          /* verde do seu card de saída antecipada */
-}
 

@@ -144,7 +144,10 @@ export default function Index() {
 
         <section className="cards">
           <div className="card">
-            <h3>Horas Extras</h3>
+            <h3 className="card-title">
+              <span className="card-icon horas-icon">⏱️</span>
+              Horas Extras
+            </h3>
             <p>
               Total de Horas: <strong>0h</strong>
             </p>
@@ -154,7 +157,10 @@ export default function Index() {
           </div>
 
           <div className="card">
-            <h3>Intervalo</h3>
+            <h3 className="card-title">
+              <span className="card-icon intervalo-icon">🍽️</span>
+              Intervalo
+            </h3>
             <p>
               Em Intervalo: <strong>0</strong>
             </p>
@@ -164,7 +170,10 @@ export default function Index() {
           </div>
 
           <div className="card">
-            <h3>Escala</h3>
+            <h3 className="card-title">
+              <span className="card-icon escala-icon">📊</span>
+              Escala
+            </h3>
             <p>
               Presentes: <strong>0</strong>
             </p>

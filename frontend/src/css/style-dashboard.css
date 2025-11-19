@@ -1,30 +1,32 @@
-/* ===================== DASHBOARD – ESTILOS ISOLADOS ===================== */
+/* ===================== GLOBAL ===================== */
 
-/* Fundo geral */
-body {
+html, body {
+  height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  overflow: hidden !important; /* Sem scroll */
   background: linear-gradient(135deg, #040404, #0571F4) !important;
   font-family: Arial, sans-serif;
-  overflow-x: hidden;
 }
 
-/* Wrapper principal */
+/* ===================== DASHBOARD WRAPPER ===================== */
+
 .dashboard {
   width: 100vw;
-  min-height: 100vh;
-  padding-bottom: 80px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
-  color: #333;
+  overflow: hidden;
 }
 
 /* ===================== TOPO ===================== */
 
 .dashboard .topbar {
   width: 100%;
-  background-color: #fff;
   height: 80px;
+  background-color: #fff;
   padding: 0 230px;
   display: flex;
   align-items: center;
@@ -32,7 +34,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Logo */
 .dashboard .logo-icon {
   display: flex;
   align-items: center;
@@ -58,7 +59,6 @@ body {
   color: black;
 }
 
-/* Menu central (desktop/tablet) */
 .dashboard .menu {
   flex: 1;
   display: flex;
@@ -84,7 +84,6 @@ body {
   color: #1d5bad;
 }
 
-/* Dropdown Gestão de Ponto (desktop) */
 .dashboard .menu-dropdown {
   position: absolute;
   top: 36px;
@@ -93,7 +92,7 @@ body {
   background: #fff;
   padding: 8px 0;
   border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
   min-width: 220px;
   z-index: 1000;
 }
@@ -108,199 +107,178 @@ body {
   padding: 10px 18px;
   font-size: 15px;
   cursor: pointer;
-  white-space: nowrap;
 }
 
 .dashboard .menu-dropdown li:hover {
   background: #f3f3f3;
 }
 
-/* Ícone Hambúrguer (por padrão, escondido em desktop) */
+/* Ícone mobile */
 .dashboard .menu-icon {
   display: none;
   font-size: 28px;
   cursor: pointer;
   padding: 8px;
-  border-radius: 8px;
-  user-select: none;
 }
 
-/* ===================== CONTEÚDO PRINCIPAL ===================== */
+/* ===================== MAIN ===================== */
 
 .dashboard main {
+  flex: 1;
   width: 100%;
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 20px 32px;
   box-sizing: border-box;
+  overflow: hidden; /* impede scroll interno */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* Saudação */
+/* ===================== SAUDAÇÃO (IDÊNTICA AO MODELO) ===================== */
 
 .dashboard .saudacao {
   background: #fff;
-  margin-top: 40px;
-  padding: 24px 30px;
+  margin-top: 20px;
+  padding: 16px 24px;
+  height: 150px;
   border-radius: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  flex-wrap: wrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 .dashboard .msg h2 {
   margin: 0;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 700;
 }
 
 .dashboard .msg p {
-  margin-top: 6px;
-  font-size: 16px;
-  color: #444;
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: #555;
 }
 
-/* Mini cards */
+/* Mini cards da saudação */
+
 .dashboard .cards-mini {
   display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
+  gap: 16px;
 }
 
 .dashboard .mini-card {
   background: #fff;
-  border-radius: 15px;
-  padding: 28px 20px;
-  min-width: 220px;
-  min-height: 130px;
+  border-radius: 12px;
+  padding: 10px 0;
+  width: 160px;
+  height: 90px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 .dashboard .mini-card span {
-  font-size: 36px;
-  margin-bottom: 8px;
+  font-size: 28px;
+  margin-bottom: 4px;
+  margin-top: 20px;
+}
+.dashboard .mini-card p {
+  font-size: 13px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
-.dashboard .atrasados {
-  border-bottom: 4px solid #e63946;
-}
-.dashboard .horas {
-  border-bottom: 4px solid #f4a261;
-}
-.dashboard .saida {
-  border-bottom: 4px solid #2a9d8f;
-}
+.dashboard .atrasados { border-bottom: 4px solid #e63946; }
+.dashboard .horas     { border-bottom: 4px solid #f4a261; }
+.dashboard .saida     { border-bottom: 4px solid #2a9d8f; }
 
-/* Filtros */
+/* ===================== FILTROS ===================== */
 
 .dashboard .filtros {
   background: #fff;
-  padding: 24px 30px;
+  padding: 14px 22px;
+  height: 80px;
   border-radius: 15px;
-  margin-top: 24px;
   display: flex;
   gap: 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  align-items: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 .dashboard .filtro label {
   display: block;
-  margin-bottom: 5px;
   font-weight: bold;
+  margin-bottom: 4px;
 }
 
 .dashboard select {
-  padding: 10px 15px;
+  padding: 8px 14px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 15px;
 }
 
-/* Cards principais */
+/* ===================== CARDS PRINCIPAIS ===================== */
 
 .dashboard .cards {
   display: flex;
-  gap: 24px;
-  margin-top: 24px;
+  gap: 16px;
+  height: 160px;
 }
 
 .dashboard .card {
   flex: 1;
   background: #fff;
-  padding: 28px 30px;
+  padding: 20px;
   border-radius: 15px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 .dashboard .card h3 {
-  margin: 0 0 20px 0;
-  font-size: 20px;
+  margin: 0 0 12px 0;
+  font-size: 18px;
 }
 
-/* ===================== RESPONSIVIDADE ===================== */
+/* ===================== RESPONSIVO ===================== */
 
 @media (max-width: 768px) {
-  .dashboard .topbar {
-    height: 70px;
-    padding: 10px 24px;
-  }
+  body { overflow-y: auto !important; }
 
-  .dashboard .logo-icon h1 {
-    font-size: 18px;
-  }
+  .dashboard .menu { display: none; }
+  .dashboard .menu-icon { display: block; }
 
-  .dashboard .car-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-  }
-
-  /* Esconde menu central no mobile */
-  .dashboard .menu {
-    display: none;
-  }
-
-  /* Mostra o hambúrguer no mobile */
-  .dashboard .menu-icon {
-    display: block;
-    font-size: 26px;
-    padding: 6px;
-  }
+  .dashboard main { overflow-y: auto; }
 
   .dashboard .saudacao {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
-
-  .dashboard .mini-card {
-    width: 100% !important;
-    min-width: unset !important;
-    max-width: 100% !important;
-    box-sizing: border-box;
+    height: auto;
+    gap: 16px;
   }
 
   .dashboard .cards-mini {
-    flex-direction: column !important;
-    gap: 16px;
     width: 100%;
-  }
-
-  .dashboard .filtros {
     flex-direction: column;
   }
+
+  .dashboard .mini-card {
+    width: 100%;
+    height: 100px;
+  }
+
+  .dashboard .filtros { height: auto; flex-direction: column; }
 
   .dashboard .cards {
     flex-direction: column;
+    height: auto;
   }
 }
 
-/* ===== MENU LATERAL (MOBILE) ===== */
+/* ===================== MENU LATERAL MOBILE ===================== */
 
 .sidebar {
   position: fixed;
@@ -309,31 +287,26 @@ body {
   width: 300px;
   height: 100vh;
   background: #ffffff;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
   padding: 20px;
   transition: transform 0.35s ease-in-out;
   z-index: 999;
-  transform: translateX(100%); /* totalmente fora da tela */
+  transform: translateX(100%);
   overflow-y: auto;
 }
 
-/* Quando abrir */
 .sidebar.open {
   transform: translateX(0);
 }
 
-/* Botão X */
 .sidebar .close-btn {
   font-size: 30px;
   font-weight: bold;
   cursor: pointer;
-  color: #333;
   text-align: right;
   margin-bottom: 15px;
-  line-height: 20px;
 }
 
-/* Lista do sidebar */
 .sidebar ul {
   list-style: none;
   padding: 0;
@@ -345,11 +318,6 @@ body {
   font-size: 16px;
   border-bottom: 1px solid #eee;
   cursor: pointer;
-  color: #333;
-}
-
-.sidebar ul li:hover {
-  background: #f0f0f0;
 }
 
 .logout-btn {
@@ -357,14 +325,57 @@ body {
   font-weight: bold;
 }
 
-/* Fundo escuro quando o menu está aberto */
 .backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0,0,0,0.45);
   backdrop-filter: blur(1px);
   z-index: 990;
 }
+
+
+/* Título com ícone */
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Esqueleto geral do ícone */
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* === CORES PERSONALIZADAS === */
+
+/* Horas Extras – mantém a cor padrão */
+.horas-icon {
+  background: #ffe9b5;     /* amarelo claro */
+  color: #d48c00;          /* amarelo forte */
+}
+
+/* Intervalo – azul claro */
+.intervalo-icon {
+  background: #d8eaff;     /* azul MUITO claro */
+  color: #1d5bad;          /* azul principal do seu tema */
+}
+
+/* Escala – verde claro */
+.escala-icon {
+  background: #dfffe1;     /* verde claro suave */
+  color: #2a9d8f;          /* verde do seu card de saída antecipada */
+}
+

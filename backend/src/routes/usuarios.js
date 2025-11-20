@@ -1,6 +1,6 @@
 // backend/src/routes/usuarios.js
 import { Router } from "express";
-
+import { validarTokenReset } from "../controllers/usuariosController.js";
 import {
   criarUsuario,
   loginUsuario,
@@ -11,15 +11,17 @@ import {
 const router = Router();
 
 // Criar usuário
-router.post("/", criarUsuario); // POST /api/usuarios
+router.post("/", criarUsuario);
 
 // Login
-router.post("/login", loginUsuario); // POST /api/usuarios/login
+router.post("/login", loginUsuario);
 
-// 🔵 Recuperação de senha — solicita token
-router.post("/recuperar", solicitarResetSenha); // POST /api/usuarios/recuperar
+// Recuperação de senha — solicita token
+router.post("/recuperar", solicitarResetSenha);
 
-// 🔵 Redefinir senha — usando token
-router.post("/resetar/:token", redefinirSenha); // POST /api/usuarios/resetar/:token
+// Redefinir senha — usando token
+router.post("/resetar/:token", redefinirSenha);
+
+router.get("/resetar/validar/:token", validarTokenReset);
 
 export default router;

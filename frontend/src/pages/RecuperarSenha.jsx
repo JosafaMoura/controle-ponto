@@ -10,12 +10,9 @@ export default function RecuperarSenha() {
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
 
-  // Aplicar estilização exclusiva do login
   useEffect(() => {
     document.body.classList.add("login-page");
-    return () => {
-      document.body.classList.remove("login-page");
-    };
+    return () => document.body.classList.remove("login-page");
   }, []);
 
   async function handleSubmit(e) {
@@ -23,19 +20,16 @@ export default function RecuperarSenha() {
     setMsg("");
 
     try {
-      await axios.post(`${API}/api/usuarios/recuperar`, {
-        usuario: email,
-      });
+      await axios.post(`${API}/api/usuarios/recuperar`, { email });
 
       setMsg("Um link foi enviado para seu e-mail.");
     } catch (err) {
-      setMsg("Usuário não encontrado ou erro ao enviar e-mail.");
+      setMsg("E-mail não encontrado ou erro ao enviar.");
     }
   }
 
   return (
     <div className="login-container">
-      {/* HEADER igual ao login */}
       <div className="header">
         <img src={logo} alt="Logo" className="logo" />
         <h2>Grupo Locar</h2>

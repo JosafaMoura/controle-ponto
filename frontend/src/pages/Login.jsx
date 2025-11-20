@@ -8,16 +8,13 @@ export default function Login() {
   const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
   const navigate = useNavigate();
 
-  const [usuario, setUsuario] = useState("");
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState(false);
 
-  // Estilo exclusivo da página de Login
   useEffect(() => {
     document.body.classList.add("login-page");
-    return () => {
-      document.body.classList.remove("login-page");
-    };
+    return () => document.body.classList.remove("login-page");
   }, []);
 
   async function handleSubmit(e) {
@@ -25,16 +22,14 @@ export default function Login() {
     setErro(false);
 
     try {
-      const payload = { usuario, senha };
+      const resp = await axios.post(`${API}/api/usuarios/login`, {
+        email,
+        senha,
+      });
 
-      // Faz login e obtém a resposta do backend
-      const resp = await axios.post(`${API}/api/usuarios/login`, payload);
-
-      // Salva o usuário vindo DA API, não o digitado
-      localStorage.setItem("auth_user", resp.data.usuario);
+      localStorage.setItem("auth_user", resp.data.email);
       localStorage.setItem("auth_login_ts", new Date().toISOString());
 
-      // Redireciona para o DASHBOARD do CRM
       navigate("/dashboard");
 
     } catch (err) {
@@ -53,20 +48,21 @@ export default function Login() {
       <h3>Insira seu E-mail e Senha</h3>
 
       <form onSubmit={handleSubmit}>
+        {/* EMAIL */}
         <div className="campo">
-          <label htmlFor="usuario">E-Mail:</label>
+          <label htmlFor="email">E-Mail:</label>
           <input
-            type="text"
-            id="usuario"
+            type="email"
+            id="email"
             placeholder="email@example.com"
             required
             autoComplete="username"
-            inputMode="email"
-            value={usuario}
-            onChange={(e) => setUsuario(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
+        {/* SENHA */}
         <div className="campo">
           <label htmlFor="senha">Senha:</label>
           <input
@@ -76,16 +72,14 @@ export default function Login() {
             required
             autoComplete="current-password"
             value={senha}
-            onChange={(e) => setSenha(e.target.value.slice(0, 16))}
+            onChange={(e) => setSenha(e.target.value)}
           />
         </div>
 
         <div className="politica">
           <input type="checkbox" id="termos" required />
           <label htmlFor="termos">
-            Ao clicar em continuar, você concorda com os nossos
-            <a href="#"> termos de serviço</a> e
-            <a href="#"> políticas de privacidade</a>.
+            Ao continuar, você aceita os termos e políticas.
           </label>
         </div>
 
@@ -97,15 +91,8 @@ export default function Login() {
         </div>
 
         {erro && (
-          <div
-            className="erro-login"
-            style={{
-              color: "crimson",
-              marginTop: 8,
-              fontWeight: 600,
-            }}
-          >
-            Usuário ou senha incorretos!
+          <div className="erro-login" style={{ color: "crimson", marginTop: 8 }}>
+            E-mail ou senha incorretos!
           </div>
         )}
       </form>

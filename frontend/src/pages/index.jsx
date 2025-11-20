@@ -34,7 +34,7 @@ export default function Index() {
       {/* ------- TOPO ------- */}
       <header className="topbar">
         <div className="logo-icon">
-          <span className="car-icon">🚗</span>
+          <img src="../android-chrome-192x192.png" alt="Ícone" style={{ width: 32, height: 32 }}/>
           <h1>Grupo Locar</h1>
         </div>
 

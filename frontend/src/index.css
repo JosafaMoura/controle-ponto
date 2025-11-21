@@ -13,6 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.container-main {
+  width: calc(100% - 20px);  /* largura total com 10px de margem em cada lado */
+  margin: 10px;              /* margem solicitada */
+  box-sizing: border-box;    /* evita estouro lateral */
+}
+
 a {
   font-weight: 500;
   color: #646cff;

@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/style-dashboard.css";
+
+// IMPORTAÇÃO DAS FUNÇÕES MOVIDAS PARA /src/js/saudacao.js
+import { getSaudacaoPorHorario, formatarDataHora } from "../js/saudacao";
 
 export default function Index() {
   const navigate = useNavigate();
 
-  const [menuOpen, setMenuOpen] = useState(false);   // menu lateral (mobile)
-  const [gestaoOpen, setGestaoOpen] = useState(false); // dropdown Gestão de Ponto (desktop + mobile)
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [gestaoOpen, setGestaoOpen] = useState(false);
+
+  const [saudacao, setSaudacao] = useState("");
+  const [dataHora, setDataHora] = useState("");
 
   function logout() {
     localStorage.removeItem("auth_user");
@@ -14,10 +20,14 @@ export default function Index() {
     navigate("/");
   }
 
-  // Itens de Gestão de Ponto (reutilizados desktop + mobile)
   const gestaoItens = (
     <>
-      <li onClick={() => { navigate("/controle-de-ponto"); setMenuOpen(false); }}>
+      <li
+        onClick={() => {
+          navigate("/controle-de-ponto");
+          setMenuOpen(false);
+        }}
+      >
         Controle de ponto
       </li>
       <li>Solicitações de ajustes</li>
@@ -29,21 +39,43 @@ export default function Index() {
     </>
   );
 
+  // ------------------------------------------------------------
+  // USEEFFECT AJUSTADO — AGORA UTILIZANDO AS FUNÇÕES EXTERNAS
+  // ------------------------------------------------------------
+  useEffect(() => {
+    const timeZone = "America/Sao_Paulo";
+
+    function atualizarCabecalho() {
+      setSaudacao(getSaudacaoPorHorario(timeZone));
+      setDataHora(formatarDataHora(timeZone));
+    }
+
+    // Atualiza imediatamente quando a página carrega
+    atualizarCabecalho();
+
+    // Atualiza a cada 30 segundos
+    const intervalo = setInterval(atualizarCabecalho, 30000);
+
+    return () => clearInterval(intervalo);
+  }, []);
+  // ------------------------------------------------------------
+
   return (
     <div className="dashboard">
       {/* ------- TOPO ------- */}
       <header className="topbar">
         <div className="logo-icon">
-          <img src="../android-chrome-192x192.png" alt="Ícone" style={{ width: 32, height: 32 }}/>
+          <img
+            src="../android-chrome-192x192.png"
+            alt="Ícone"
+            style={{ width: 32, height: 32 }}
+          />
           <h1>Grupo Locar</h1>
         </div>
 
-        {/* MENU DESKTOP / TABLET */}
+        {/* MENU DESKTOP */}
         <nav className="menu">
-          <div
-            className="menu-item"
-            onMouseLeave={() => setGestaoOpen(false)}
-          >
+          <div className="menu-item" onMouseLeave={() => setGestaoOpen(false)}>
             <button
               type="button"
               className="menu-button"
@@ -54,9 +86,7 @@ export default function Index() {
 
             {gestaoOpen && (
               <div className="menu-dropdown">
-                <ul onClick={() => setGestaoOpen(false)}>
-                  {gestaoItens}
-                </ul>
+                <ul onClick={() => setGestaoOpen(false)}>{gestaoItens}</ul>
               </div>
             )}
           </div>
@@ -70,13 +100,13 @@ export default function Index() {
           </button>
         </nav>
 
-        {/* ÍCONE HAMBÚRGUER (SÓ MOBILE – controlado via CSS) */}
+        {/* MENU MOBILE */}
         <div className="menu-icon" onClick={() => setMenuOpen(true)}>
           ☰
         </div>
       </header>
 
-      {/* ------- MENU LATERAL (MOBILE) ------- */}
+      {/* MENU LATERAL MOBILE */}
       <aside className={`sidebar ${menuOpen ? "open" : ""}`}>
         <div className="close-btn" onClick={() => setMenuOpen(false)}>
           ×
@@ -97,17 +127,16 @@ export default function Index() {
         </ul>
       </aside>
 
-      {/* BACKDROP – fecha ao clicar fora (mobile) */}
       {menuOpen && (
         <div className="backdrop" onClick={() => setMenuOpen(false)}></div>
       )}
 
       {/* ------- CONTEÚDO PRINCIPAL ------- */}
-      <main>
+      <main className="container-main">
         <section className="saudacao">
           <div className="msg">
-            <h2>Bom dia!</h2>
-            <p>domingo, 9 de novembro de 2025 às 11:25:18</p>
+            <h2>{saudacao}</h2>
+            <p>{dataHora}</p>
           </div>
 
           <div className="cards-mini">
@@ -186,4 +215,3 @@ export default function Index() {
     </div>
   );
 }
-

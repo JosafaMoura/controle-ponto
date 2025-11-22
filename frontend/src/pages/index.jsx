@@ -14,10 +14,18 @@ export default function Index() {
   const [saudacao, setSaudacao] = useState("");
   const [dataHora, setDataHora] = useState("");
 
+  // 🔒 Proteção de rota: se não estiver logado, volta pro login
+  useEffect(() => {
+    const user = localStorage.getItem("auth_user");
+    if (!user) {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
+
   function logout() {
     localStorage.removeItem("auth_user");
     localStorage.removeItem("auth_login_ts");
-    navigate("/");
+    navigate("/", { replace: true });
   }
 
   const gestaoItens = (
@@ -99,6 +107,11 @@ export default function Index() {
             Cadastro
           </button>
         </nav>
+
+        {/* BOTÃO SAIR (DESKTOP) */}
+        <div className="logout-top" onClick={logout}>
+          <img src="/sair.png" alt="Sair" className="logout-icon" />
+        </div>
 
         {/* MENU MOBILE */}
         <div className="menu-icon" onClick={() => setMenuOpen(true)}>

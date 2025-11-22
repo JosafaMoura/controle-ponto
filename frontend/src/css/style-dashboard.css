@@ -402,4 +402,20 @@ html, body {
   z-index: 990;
 }
 
+/* ===================== Botão sair ===================== */
+.logout-top {
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.logout-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  transition: transform 0.2s;
+}
+
+.logout-icon:hover {
+  transform: scale(1.1);
+}
 

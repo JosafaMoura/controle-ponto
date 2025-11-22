@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import logo from "../imagens/logo/Logotipo.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,8 +13,16 @@ export default function Login() {
   const [erro, setErro] = useState(false);
 
   useEffect(() => {
+    // Aplica estilo da página de login
     document.body.classList.add("login-page");
-    return () => document.body.classList.remove("login-page");
+
+    // ⚠️ Sempre que voltar para a tela de LOGIN, a sessão é quebrada
+    localStorage.removeItem("auth_user");
+    localStorage.removeItem("auth_login_ts");
+
+    return () => {
+      document.body.classList.remove("login-page");
+    };
   }, []);
 
   async function handleSubmit(e) {
@@ -27,11 +35,12 @@ export default function Login() {
         senha,
       });
 
+      // Salva sessão
       localStorage.setItem("auth_user", resp.data.email);
       localStorage.setItem("auth_login_ts", new Date().toISOString());
 
+      // Vai para o dashboard
       navigate("/dashboard");
-
     } catch (err) {
       setErro(true);
       setTimeout(() => setErro(false), 3000);
@@ -83,7 +92,9 @@ export default function Login() {
           </label>
         </div>
 
-        <button type="submit" className="btn-login">Entrar</button>
+        <button type="submit" className="btn-login">
+          Entrar
+        </button>
 
         <div className="links">
           <Link to="/criar-conta">Criar Conta</Link> |{" "}
@@ -91,7 +102,10 @@ export default function Login() {
         </div>
 
         {erro && (
-          <div className="erro-login" style={{ color: "crimson", marginTop: 8 }}>
+          <div
+            className="erro-login"
+            style={{ color: "crimson", marginTop: 8 }}
+          >
             E-mail ou senha incorretos!
           </div>
         )}
@@ -99,4 +113,3 @@ export default function Login() {
     </div>
   );
 }
-
